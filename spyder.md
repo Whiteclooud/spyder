@@ -39,22 +39,7 @@ requests模块：python中原生的一款基于网络请求的模块，功能非
 （2）发起请求   
 （3）获取响应数据  
 （4）持久化存储  
-```
-#需求：爬取搜狗主页的页面数据  
-import requests  
-#step 1:指定url  
-url='https://www.sogou.com/'  
-#step 2:发起请求  
-#get方法会返回一个响应对象  
-response = requests.get(url=url)  
-#step 3:获取响应数据。text返回的是字符串形式的响应数据  
-page_text = response.text  
-print(page_text)  
-#step 4:持久化存储  
-with open('sogou.html','w',encoding='utf-8') as fp:  
-    fp.write(page_text)  
-print('爬取数据结束')  
-```  
+
 ### UA伪装（02）  
 UA:User-Agent(请求载体的身份标识)  
 身份标识：  
@@ -63,3 +48,25 @@ UA:User-Agent(请求载体的身份标识)
 **UA检测**：门户网站的服务器会检测对应请求的载体身份标识，如果检测到请求的载体身份标识为某一款浏览器，说明该请求是一种正常的请求。但是，如果检测到请求的载体身份标识不是基于某一款浏览器的，则表示该过程为不正常请求（爬虫）,则服务端就很肯拒绝该次请求。  
 **UA伪装**：让爬虫对应的请求载体身份标识伪装成某一款浏览器。   
 为了使每次请求都成功，要进行UA伪装。  
+
+```
+import requests
+#UA伪装：将对应的User-Agent封装到一个字典中
+url='https://www.sogou.com/web?query=波晓张'
+#处理url携带的参数:封装到字典中
+headers={
+    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.46'
+    }
+kw=input('enter a word:')
+param = {
+    'query':kw
+    }
+#对指定url发起的请求是携带参数的，并且请求过程中处理了函数。
+response = requests.get(url=url,params=param,headers=headers)
+page_text = response.text
+fileName = kw + '.html'
+with open(fileName,'w',encoding='utf-8') as fp:
+    fp.write(page_text)
+print(fileName,'保存成功！')
+```  
+  
